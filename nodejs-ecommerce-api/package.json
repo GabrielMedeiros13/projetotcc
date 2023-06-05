@@ -15,7 +15,12 @@
   "author": "Gabriel Medeiros",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.1.3",
     "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "^5.5.0",
     "mongoose": "^7.2.0"
   },
   "devDependencies": {
