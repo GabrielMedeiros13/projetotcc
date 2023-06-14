@@ -5,6 +5,7 @@ import dbConnect from "../config/dbConnect.js"
 import { globalErrorHandler, notFound } from "../middlewares/globalErrorHandler.js";
 import userRoutes from "../routes/usersRoute.js";
 import productsRouter from "../routes/productsRoute.js";
+import categoriesRouter from "../routes/categoriesRouter.js";
 
 
 //Conexão com o bando de dados
@@ -17,6 +18,7 @@ app.use(express.json());
 //rotas
 app.use('/api/v1/users/', userRoutes);
 app.use('/api/v1/products/', productsRouter);
+app.use('/api/v1/categories', categoriesRouter);
 
 //error middleware
 app.use(notFound);
