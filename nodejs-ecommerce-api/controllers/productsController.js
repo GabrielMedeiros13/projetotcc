@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Product from "../model/Product.js";
 import Category from "../model/Category.js";
+import Brand from "../model/Brand.js";
 
 // @desc Criar um novo produto
 // @route POST /api/v1/products
@@ -24,6 +25,16 @@ export const createProductController = asyncHandler(async(req, res)=>{
         );
     }
 
+    //achar a marca
+    const brandFound = await Brand.findOne({
+        name: brand.toLowerCase(),
+    });
+    if(!brandFound){
+        throw new Error(
+            'Brand not found, please create a brand first or verify the brand name'
+        );
+    }
+
     //Criando o produto
     const product = await Product.create({
         name,
@@ -41,6 +52,13 @@ export const createProductController = asyncHandler(async(req, res)=>{
 
     //resave
     await categoryFound.save();
+
+    // push the product into brand
+    brandFound.products.push(product._id);
+
+    //resave
+    await brandFound.save();
+
     //send a response
     res.json({
         status: "success",
@@ -136,7 +154,7 @@ export const getProductsController = asyncHandler(async(req,res)=>{
     }
 
     // await the query
-    const products = await productQuery;
+    const products = await productQuery.populate('reviews');
 
     res.json({
         status: "success",
@@ -153,7 +171,7 @@ export const getProductsController = asyncHandler(async(req,res)=>{
 // @access Publico
 
 export const getProductController = asyncHandler(async(req,res)=>{
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate("reviews");
     if(!product){
         throw new Error('Product not found')
     }else{
